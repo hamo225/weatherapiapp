@@ -19,7 +19,7 @@ if ($_GET['city']) {
     // We know that code 202 is for successfull searches so anything 
     // else we put it to come up an error message that city cannot be found.
 
-    if ($weatherArray['code'] == 200) {
+    if ($weatherArray['code'] == 202) {
 
         // need weather by city location
         // can look at the parameters for the information on the api documentation site
