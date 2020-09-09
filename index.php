@@ -1,29 +1,46 @@
 <?php
 
-// include another file
-// include("includedFile.php");
-
-// use this to get html content from a website
-// echo file_get_contents("http://savelebanesehospitality.com");
-
 // if someone has requested city. if someone has inputed a city and pressed submit
 if ($_GET['city']) {
 
-    // this is the page that will be scraped
-    $forecastPage = file_get_contents("http://www.completewebdevelopercourse.com/locations/" . $_GET['city']);
+    // test with echo that the file_get contents will display the information we want
+    // echo
 
-    // this will explode the html of the page up to this unique point
-    $pageArray = explode('3 Day Weather Forecast Summary:</b><span class="read-more-small"><span class="read-more-content"> <span class="phrase">', $forecastPage);
+    // getting the contents of the input address for the api call for any city depending on what the user input into the get form. 
+    file_get_contents("http://api.openweathermap.org/data/2.5/weather?q=" . $_GET['city'] . "&appid=9eb84fa16fe5fc0386da5f9eb590d243");
 
-    // this will explode the page up to the point and leave a new array of the data we want
-    $secondPageArray = explode('</span></span></span>', $pageArray[1]);
 
-    // create a new array for the data
-    $weather = $secondPageArray[0];
+    // this is in json format and we need it in an array to extract the data
+    // json_decode will extract the data from json format and put it into an array format called weatherarray
+    //  which we then can further take out info that we need to display to the user
+    $weatherArray =  json_decode($urlContents, true);
+
+    // we put the whole code block inside an if statement. 
+    // We know that code 202 is for successfull searches so anything 
+    // else we put it to come up an error message that city cannot be found.
+
+    if ($weatherArray['code'] == 200) {
+
+        // need weather by city location
+        // can look at the parameters for the information on the api documentation site
+
+
+        // here we create the variable weather to include - the weather paramters from the weather array. 
+        $weather = "The weather in " . $_GET['city'] . " is currently '" . $weatherArray['weather'][0]['description'] . "'.";
+
+        // we add the temperature in celcius . intval will make it a whole number value
+        $temperatureInCelcius = intval($weatherArray['main']['temp'] - 273);
+
+        // we append the weather variable to include the temperature for the location
+        $weather .= " The temperature is " . $temperatureInCelcius . "&deg;c";
+
+        $windSpeed = $weatherArray['wind']['speed'];
+
+        $weather .= " The wind speed is " . $windSpeed . "mp/s";
+    } else {
+        $error = "Could not find city - please try again";
+    }
 }
-
-
-
 
 ?>
 
