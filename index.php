@@ -7,7 +7,7 @@ if ($_GET['city']) {
     // echo
 
     // getting the contents of the input address for the api call for any city depending on what the user input into the get form. 
-    file_get_contents("http://api.openweathermap.org/data/2.5/weather?q=" . $_GET['city'] . "&appid=9eb84fa16fe5fc0386da5f9eb590d243");
+    file_get_contents("http://api.openweathermap.org/data/2.5/weather?q=" . urlencode($_GET['city']) . "&appid=9eb84fa16fe5fc0386da5f9eb590d243");
 
 
     // this is in json format and we need it in an array to extract the data
@@ -23,7 +23,6 @@ if ($_GET['city']) {
 
         // need weather by city location
         // can look at the parameters for the information on the api documentation site
-
 
         // here we create the variable weather to include - the weather paramters from the weather array. 
         $weather = "The weather in " . $_GET['city'] . " is currently '" . $weatherArray['weather'][0]['description'] . "'.";
