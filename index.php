@@ -2,35 +2,41 @@
 
 $weather = "";
 $error = "";
+$hotWeather = "";
+$coldWeather = "";
+$normalWeather = "";
+$weatherDescription = "";
+
+$bg = array('/bg-01.jpg', '/bg-02.jpg', '/bg-03.jpg', '/bg-05.jpg', '/bg-06.jpg', '/bg-07.jpg'); // array of filenames
+
+$i = rand(0, count($bg) - 1); // generate random number size of the array
+$selectedBg = "$bg[$i]";
 
 if ($_GET['city']) {
 
-
     $urlContents = file_get_contents("http://api.openweathermap.org/data/2.5/weather?q=" . $_GET['city'] . "&appid=9eb84fa16fe5fc0386da5f9eb590d243");
-
 
     $weatherArray = json_decode($urlContents, true);
 
+
     if ($weatherArray['cod'] == 200) {
 
-        // print_r($weatherArray);
-
         $weather = "The weather description in " . $_GET['city'] . " is currently: " . $weatherArray['weather'][0]['description'] . ". \n";
-
-        // print_r($weather);
-
         $tempInCelcius = $weatherArray['main']['temp'] - 273;
         $feelsLike = $weatherArray['main']['feels_like'] - 273;
         $maxTemp = $weatherArray['main']['temp_max'] - 273;
         $humidity = $weatherArray['main']['humidity'];
-
-
         $hotWeather = " HOT!";
         $coldWeather = " COLD!";
-        $normalWeather = " COLD!";
+        $normalWeather = " NORMAL. DONT COMPLAIN!";
 
-
-        $weatherDescription = "";
+        if ($tempInCelcius >= 25) {
+            $selectedBg = "/bg-02.jpg";
+        } elseif ($tempInCelcius < 10) {
+            $selectedBg = "/bg-03.jpg";
+        } else {
+            $selectedBg = "$bg[$i]";
+        }
 
         if ($tempInCelcius >= 25) {
             $weatherDescription = $hotWeather;
@@ -43,28 +49,10 @@ if ($_GET['city']) {
         $weather .= " Its gonna be FUCKING" . $weatherDescription . "The temperature is " . $tempInCelcius . "&degC";
         $weather .= " Humidity is " . $humidity . ".";
         $weather .= " Max temp today will be " . $maxTemp . "&degC.";
-        $weather .= " But it really feels like " . $feelsLike . "&degC";
+        $weather .= " But mother earth is fucking with you really cos it feels like " . $feelsLike . "&degC";
     } else {
         $error = "WHAT? ARE YOU FUCKING STUPID? " . $_GET['city'] . " is not a city! Go back to fucking school, learn some shit, then come back and try again.";
     }
-}
-
-
-$bg = array('/bg-01.jpg', '/bg-02.jpg', '/bg-03.jpg', '/bg-05.jpg', '/bg-06.jpg', '/bg-07.jpg'); // array of filenames
-
-$i = rand(0, count($bg) - 1); // generate random number size of the array
-$selectedBg = "$bg[$i]";
-
-// print_r($selectedBg);
-
-
-if ($tempInCelcius >= 25) {
-
-    $selectedBg = "/bg-02.jpg";
-} elseif ($tempInCelcius < 10) {
-    $selectedBg = "/bg-03.jpg";
-} else {
-    $selectedBg = "$bg[$i]";
 }
 
 ?>
@@ -104,6 +92,16 @@ if ($tempInCelcius >= 25) {
         #weather {
             margin-top: 20px;
         }
+
+        a {
+            text-decoration: none;
+            color: black;
+        }
+
+        a:hover {
+            color: black;
+            text-decoration: none;
+        }
     </style>
 
 
@@ -112,7 +110,7 @@ if ($tempInCelcius >= 25) {
 <body>
 
     <div class="container">
-        <h1>Whats the Weather now?</h1>
+        <h1><a href="/index.php"> Whats the Weather now?</a></h1>
 
         <form action="" method="get">
             <div class="form-group">
@@ -143,7 +141,12 @@ if ($tempInCelcius >= 25) {
     </div>
 
     <script>
+        function myfunction() {
 
+            document.getElementById("error").style.display = "none";
+            document.getElementById("weather").style.display = "none";
+
+        }
     </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
