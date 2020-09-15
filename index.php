@@ -49,7 +49,7 @@ if ($_GET['city']) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather Scraper</title>
+    <title>Weather Genie</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 
     <style>
@@ -83,19 +83,17 @@ if ($_GET['city']) {
 
 </head>
 
-
-
 <body>
 
     <div class="container">
-        <h1>Whats the Weather</h1>
+        <h1>Whats the fucking Weather?</h1>
 
         <form action="" method="get">
             <div class="form-group">
-                <label for="city">Enter Name of City:</label>
-                <input type="text" name="city" id="city" class="form-control" placeholder="e.g. London, Berlin" aria-describedby="helpId">
+                <!-- <label for="city">Enter Name of City:</label> -->
+                <input type="text" name="city" id="city" class="form-control" placeholder="Enter Name of City e.g. London, Berlin, Mars..." aria-describedby="helpId">
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-success">Search</button>
 
         </form>
 
