@@ -1,45 +1,38 @@
 <?php
 
-// if someone has requested city. if someone has inputed a city and pressed submit
+$weather = "";
+$error = "";
+
 if ($_GET['city']) {
 
-    // test with echo that the file_get contents will display the information we want
-    // echo
 
-    // getting the contents of the input address for the api call for any city depending on what the user input into the get form. 
-    file_get_contents("http://api.openweathermap.org/data/2.5/weather?q=" . urlencode($_GET['city']) . "&appid=9eb84fa16fe5fc0386da5f9eb590d243");
+    $urlContents = file_get_contents("http://api.openweathermap.org/data/2.5/weather?q=" . $_GET['city'] . "&appid=9eb84fa16fe5fc0386da5f9eb590d243");
 
 
-    // this is in json format and we need it in an array to extract the data
-    // json_decode will extract the data from json format and put it into an array format called weatherarray
-    //  which we then can further take out info that we need to display to the user
-    $weatherArray =  json_decode($urlContents, true);
+    $weatherArray = json_decode($urlContents, true);
 
-    // we put the whole code block inside an if statement. 
-    // We know that code 202 is for successfull searches so anything 
-    // else we put it to come up an error message that city cannot be found.
+    if ($weatherArray['cod'] == 200) {
 
-    if ($weatherArray['code'] == 202) {
+        // print_r($weatherArray);
 
-        // need weather by city location
-        // can look at the parameters for the information on the api documentation site
+        $weather = "The weather in " . $_GET['city'] . " is " . $weatherArray['weather'][0]['description'] . ". \n";
 
-        // here we create the variable weather to include - the weather paramters from the weather array. 
-        $weather = "The weather in " . $_GET['city'] . " is currently '" . $weatherArray['weather'][0]['description'] . "'.";
+        // print_r($weather);
 
-        // we add the temperature in celcius . intval will make it a whole number value
-        $temperatureInCelcius = intval($weatherArray['main']['temp'] - 273);
+        $tempInCelcius = $weatherArray['main']['temp'] - 273;
+        $feelsLike = $weatherArray['main']['feels_like'] - 273;
+        $maxTemp = $weatherArray['main']['temp_max'] - 273;
+        $humidity = $weatherArray['main']['humidity'];
 
-        // we append the weather variable to include the temperature for the location
-        $weather .= " The temperature is " . $temperatureInCelcius . "&deg;c";
-
-        $windSpeed = $weatherArray['wind']['speed'];
-
-        $weather .= " The wind speed is " . $windSpeed . "mp/s";
+        $weather .= " Its gonna be FUCKING HOT! The temperature is " . $tempInCelcius . "&degC";
+        $weather .= " Humidity is " . $humidity . ".";
+        $weather .= " Max temp today will be " . $maxTemp . "&degC.";
+        $weather .= " But it really feels like " . $feelsLike . "&degC";
     } else {
-        $error = "Could not find city - please try again";
+        $error = "WHAT? ARE YOU FUCKING STUPID? " . $_GET['city'] . " is not a city! Go back to fucking school, learn some shit, then come back and try again.";
     }
 }
+
 
 ?>
 
@@ -68,11 +61,11 @@ if ($_GET['city']) {
         .container {
             text-align: center;
             margin-top: 100px;
-            width: 450px;
+            width: 400px;
         }
 
         input {
-            margin: 20px;
+            margin-top: 20px;
         }
 
         #weather {
@@ -86,7 +79,7 @@ if ($_GET['city']) {
 <body>
 
     <div class="container">
-        <h1>Whats the fucking Weather?</h1>
+        <h1>Whats the Weather now?</h1>
 
         <form action="" method="get">
             <div class="form-group">
@@ -97,23 +90,24 @@ if ($_GET['city']) {
 
         </form>
 
-        <div id="weather">
+        <div id="weather" id="error">
+
             <?php
 
             if ($weather) {
-
-                echo '<div class= "alert alert-success" role= "alert">' . $weather . '</div>';
+                echo '<div class="alert alert-success" role="alert">' . $weather . '</div>';
             }
 
+
+            if ($error) {
+                echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
+            }
 
             ?>
 
         </div>
 
     </div>
-
-
-
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
