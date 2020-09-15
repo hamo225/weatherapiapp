@@ -15,7 +15,7 @@ if ($_GET['city']) {
 
         // print_r($weatherArray);
 
-        $weather = "The weather in " . $_GET['city'] . " is " . $weatherArray['weather'][0]['description'] . ". \n";
+        $weather = "The weather description in " . $_GET['city'] . " is currently: " . $weatherArray['weather'][0]['description'] . ". \n";
 
         // print_r($weather);
 
@@ -24,7 +24,23 @@ if ($_GET['city']) {
         $maxTemp = $weatherArray['main']['temp_max'] - 273;
         $humidity = $weatherArray['main']['humidity'];
 
-        $weather .= " Its gonna be FUCKING HOT! The temperature is " . $tempInCelcius . "&degC";
+
+        $hotWeather = " HOT!";
+        $coldWeather = " COLD!";
+        $normalWeather = " COLD!";
+
+
+        $weatherDescription = "";
+
+        if ($tempInCelcius >= 25) {
+            $weatherDescription = $hotWeather;
+        } elseif ($tempInCelcius < 10) {
+            $weatherDescription = $coldWeather;
+        } else {
+            $weatherDescription = $normalWeather;
+        }
+
+        $weather .= " Its gonna be FUCKING" . $weatherDescription . "The temperature is " . $tempInCelcius . "&degC";
         $weather .= " Humidity is " . $humidity . ".";
         $weather .= " Max temp today will be " . $maxTemp . "&degC.";
         $weather .= " But it really feels like " . $feelsLike . "&degC";
@@ -33,6 +49,23 @@ if ($_GET['city']) {
     }
 }
 
+
+$bg = array('/bg-01.jpg', '/bg-02.jpg', '/bg-03.jpg', '/bg-05.jpg', '/bg-06.jpg', '/bg-07.jpg'); // array of filenames
+
+$i = rand(0, count($bg) - 1); // generate random number size of the array
+$selectedBg = "$bg[$i]";
+
+// print_r($selectedBg);
+
+
+if ($tempInCelcius >= 25) {
+
+    $selectedBg = "/bg-02.jpg";
+} elseif ($tempInCelcius < 10) {
+    $selectedBg = "/bg-03.jpg";
+} else {
+    $selectedBg = "$bg[$i]";
+}
 
 ?>
 
@@ -47,7 +80,7 @@ if ($_GET['city']) {
 
     <style>
         html {
-            background: url("/christophe-ZGQsHzU5Sls-unsplash.jpg");
+            background: url(<?php echo $selectedBg; ?>);
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
@@ -109,6 +142,9 @@ if ($_GET['city']) {
 
     </div>
 
+    <script>
+
+    </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
