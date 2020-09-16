@@ -73,7 +73,8 @@ if ($_GET['city']) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Genie</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHMND1BKe-5plW0YkXWaIYljoG6S1h8Kc&callback=initMap&libraries=&v=weekly" defer></script>
     <style>
         html {
             /* the background image is the random or specific one as in the php script above */
@@ -98,7 +99,7 @@ if ($_GET['city']) {
             margin-top: 20px;
         }
 
-        #weather {
+        .weather {
             margin-top: 20px;
         }
 
@@ -110,6 +111,10 @@ if ($_GET['city']) {
         a:hover {
             color: black;
             text-decoration: none;
+        }
+
+        .map {
+            height: 100%;
         }
     </style>
 
@@ -126,11 +131,13 @@ if ($_GET['city']) {
                 <!-- <label for="city">Enter Name of City:</label> -->
                 <input type="text" name="city" id="city" class="form-control" placeholder="Enter Name of City e.g. London, Berlin, Mars..." aria-describedby="helpId">
             </div>
-            <button type="submit" class="btn btn-success">Search</button>
+            <button onclick="findMe()" type="submit" class="btn btn-success">My Location</button>
+            <button type="submit" class="btn btn-success">City Search</button>
+            <a href="/index.php"><button type="submit" class="btn btn-warning">Refresh</button></a>
 
         </form>
 
-        <div id="weather" id="error">
+        <div class="weather" id="error">
 
             <?php
 
@@ -147,8 +154,59 @@ if ($_GET['city']) {
 
         </div>
 
+        <div class="map"></div>
     </div>
+    <script>
+        "use strict";
 
+        // Note: This example requires that you consent to location sharing when
+        // prompted by your browser. If you see the error "The Geolocation service
+        // failed.", it means you probably did not give permission for the browser to
+        // locate you.
+        let map, infoWindow;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: {
+                    lat: -34.397,
+                    lng: 150.644
+                },
+                zoom: 6
+            });
+            infoWindow = new google.maps.InfoWindow(); // Try HTML5 geolocation.
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        const pos = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        infoWindow.setPosition(pos);
+                        infoWindow.setContent("Location found.");
+                        infoWindow.open(map);
+                        map.setCenter(pos);
+                    },
+                    () => {
+                        handleLocationError(true, infoWindow, map.getCenter());
+                    }
+                );
+            } else {
+                // Browser doesn't support Geolocation
+                handleLocationError(false, infoWindow, map.getCenter());
+            }
+        }
+
+        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+            infoWindow.setPosition(pos);
+            infoWindow.setContent(
+                browserHasGeolocation ?
+                "Error: The Geolocation service failed." :
+                "Error: Your browser doesn't support geolocation."
+            );
+            infoWindow.open(map);
+        }
+    </script>
     <script>
         // on page load both error or weather boxs are reverted to not displaying
         function myfunction() {
