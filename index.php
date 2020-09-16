@@ -17,13 +17,16 @@ $selectedBg = "$bg[$i]";
 
 if ($_GET['city']) {
 
+    // create a variable and use get contents to get json data from the url with the api key of the input city
     $urlContents = file_get_contents("http://api.openweathermap.org/data/2.5/weather?q=" . $_GET['city'] . "&appid=9eb84fa16fe5fc0386da5f9eb590d243");
 
+    // decode the json contents using json_decode and place them in an array
     $weatherArray = json_decode($urlContents, true);
 
 
     if ($weatherArray['cod'] == 200) {
 
+        // create variables for the data you need from the arrays
         $weather = "The weather description in " . $_GET['city'] . " is currently: " . $weatherArray['weather'][0]['description'] . ". \n";
         $tempInCelcius = $weatherArray['main']['temp'] - 273;
         $feelsLike = $weatherArray['main']['feels_like'] - 273;
@@ -33,6 +36,7 @@ if ($_GET['city']) {
         $coldWeather = " COLD!";
         $normalWeather = " NORMAL. DONT COMPLAIN!";
 
+        // if statements
         if ($tempInCelcius >= 25) {
             $selectedBg = "/bg-02.jpg";
         } elseif ($tempInCelcius < 10) {
@@ -41,6 +45,7 @@ if ($_GET['city']) {
             $selectedBg = "$bg[$i]";
         }
 
+        // if statements
         if ($tempInCelcius >= 25) {
             $weatherDescription = $hotWeather;
         } elseif ($tempInCelcius < 10) {
@@ -145,6 +150,7 @@ if ($_GET['city']) {
     </div>
 
     <script>
+        // on page load both error or weather boxs are reverted to not displaying
         function myfunction() {
 
             document.getElementById("error").style.display = "none";
