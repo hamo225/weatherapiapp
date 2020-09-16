@@ -1,5 +1,6 @@
 <?php
 
+// declare the variables you will use
 $weather = "";
 $error = "";
 $hotWeather = "";
@@ -7,9 +8,11 @@ $coldWeather = "";
 $normalWeather = "";
 $weatherDescription = "";
 
-$bg = array('/bg-01.jpg', '/bg-02.jpg', '/bg-03.jpg', '/bg-05.jpg', '/bg-06.jpg', '/bg-07.jpg'); // array of filenames
-
-$i = rand(0, count($bg) - 1); // generate random number size of the array
+// create a background array of all the names of the images you will use
+$bg = array('/bg-01.jpg', '/bg-02.jpg', '/bg-03.jpg', '/bg-05.jpg', '/bg-06.jpg', '/bg-07.jpg');
+// generate a random number which will be the index of the above array
+$i = rand(0, count($bg) - 1);
+// create a variable which selects the background array and the each time the page loads a random index number for the background image
 $selectedBg = "$bg[$i]";
 
 if ($_GET['city']) {
@@ -68,6 +71,7 @@ if ($_GET['city']) {
 
     <style>
         html {
+            /* the background image is the random or specific one as in the php script above */
             background: url(<?php echo $selectedBg; ?>);
             background-size: cover;
             background-repeat: no-repeat;
