@@ -65,6 +65,7 @@ if ($_GET['city']) {
 
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 
