@@ -1,4 +1,4 @@
-# weatherapiapp
+# Weather Genie
 
 Weather api app
 1. Input field for user. User selects from Dropdown menu or just inputs the city name. - opted for user types input. done
